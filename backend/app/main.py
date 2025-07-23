@@ -6,9 +6,10 @@ from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 from .database.database import engine, Base
-from .routers import auth, profile, routines, dashboard, asanas
+from .routers import auth, profile, routines, dashboard, asanas, admin_auth
+from .routers import admin as admin_router
 # Import all models to ensure they're registered before creating tables
-from .models import user, asana, routine
+from .models import user, asana, routine, admin
 from .core.config import settings
 from .core.logging import setup_logging, app_logger
 from .core.monitoring import RequestMonitoring, ErrorHandler, health_check
@@ -88,6 +89,10 @@ app.include_router(profile.router)
 app.include_router(routines.router)
 app.include_router(dashboard.router)
 app.include_router(asanas.router, prefix="/asanas", tags=["asanas"])
+
+# Admin routers
+app.include_router(admin_auth.router)
+app.include_router(admin_router.router)
 
 @app.get("/")
 def read_root():
