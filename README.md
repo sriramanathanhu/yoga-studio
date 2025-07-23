@@ -47,4 +47,4 @@ yogastudio/
 - 12-component asana display system
 - Progress tracking and analytics
 - 500+ yoga asanas with detailed instructions
-- Responsive web design
+- Responsive web design# Test change
