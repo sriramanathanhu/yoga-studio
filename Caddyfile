@@ -1,0 +1,131 @@
+yogastudio.ecitizen.media {
+    # Reverse proxy for API requests
+    handle /api/* {
+        uri strip_prefix /api
+        reverse_proxy backend:8000
+    }
+    
+    # Reverse proxy for authentication routes
+    handle /auth/* {
+        reverse_proxy backend:8000
+    }
+    
+    # Reverse proxy for asanas routes
+    handle /asanas/* {
+        reverse_proxy backend:8000
+    }
+    
+    # Reverse proxy for routines routes
+    handle /routines/* {
+        reverse_proxy backend:8000
+    }
+    
+    # Reverse proxy for dashboard routes
+    handle /dashboard/* {
+        reverse_proxy backend:8000
+    }
+    
+    # Reverse proxy for profile routes
+    handle /profile/* {
+        reverse_proxy backend:8000
+    }
+    
+    # Health check endpoint
+    handle /health {
+        reverse_proxy backend:8000
+    }
+    
+    # Root API endpoint
+    handle /docs {
+        reverse_proxy backend:8000
+    }
+    
+    handle /openapi.json {
+        reverse_proxy backend:8000
+    }
+    
+    # Serve React app for all other requests
+    handle {
+        reverse_proxy frontend:80
+    }
+    
+    # Enable gzip compression
+    encode gzip
+    
+    # Comprehensive security headers
+    header {
+        # Enable HSTS with preload
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        
+        # Prevent MIME type sniffing
+        X-Content-Type-Options "nosniff"
+        
+        # Frame protection
+        X-Frame-Options "SAMEORIGIN"
+        
+        # Enhanced Content Security Policy
+        Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+        
+        # Referrer policy for privacy
+        Referrer-Policy "strict-origin-when-cross-origin"
+        
+        # Permissions policy (feature policy)
+        Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), speaker=()"
+        
+        # Cross-Origin policies
+        Cross-Origin-Embedder-Policy "require-corp"
+        Cross-Origin-Opener-Policy "same-origin"
+        Cross-Origin-Resource-Policy "same-origin"
+        
+        # Remove server identification
+        -Server
+        -X-Powered-By
+    }
+    
+    # Logging
+    log {
+        output file /var/log/caddy/access.log {
+            roll_size 100MB
+            roll_keep 10
+        }
+        format json
+    }
+    
+    # Error handling
+    handle_errors {
+        @404 {
+            expression {http.error.status_code} == 404
+        }
+        rewrite @404 /
+        reverse_proxy frontend:80
+    }
+}
+
+# WordPress Sites
+uanhcrwp.ecitizen.media {
+    reverse_proxy 172.17.0.1:8001
+}
+
+uantscwp.ecitizen.media {
+    reverse_proxy 172.17.0.1:8002
+}
+
+uanicjwp.ecitizen.media {
+    reverse_proxy 172.17.0.1:8003
+}
+
+uansecwp.ecitizen.media {
+    reverse_proxy 172.17.0.1:8004
+}
+
+uanecosoc.ecitizen.media {
+    reverse_proxy 172.17.0.1:8005
+}
+
+uangawp.ecitizen.media {
+    reverse_proxy 172.17.0.1:8006
+}
+
+uanscwp.ecitizen.media {
+    reverse_proxy 172.17.0.1:8007
+}

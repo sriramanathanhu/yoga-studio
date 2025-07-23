@@ -1,0 +1,15 @@
+# Testing dependencies
+pytest==7.4.0
+pytest-asyncio==0.21.1
+pytest-cov==4.1.0
+httpx==0.24.1
+pytest-mock==3.11.1
+
+# Test database
+pytest-postgresql==5.0.0
+
+# Factory pattern for test data
+factory-boy==3.3.0
+
+# Time freezing for tests
+freezegun==1.2.2
