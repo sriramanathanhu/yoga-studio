@@ -25,7 +25,8 @@ const AdminUsers = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [showUserModal, setShowUserModal] = useState(false);
 
-  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+  const API_BASE_URL = process.env.REACT_APP_API_URL || 
+    (process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8000');
   const PAGE_SIZE = 20;
 
   useEffect(() => {
@@ -48,7 +49,7 @@ const AdminUsers = () => {
         params.append('user_status', filters.user_status);
       }
 
-      const response = await fetch(`${API_BASE_URL}/admin/users?${params}`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/users?${params}`, {
         method: 'GET',
         credentials: 'include',
         headers: {
@@ -74,7 +75,7 @@ const AdminUsers = () => {
 
   const fetchUserDetails = async (userId) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/admin/users/${userId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/users/${userId}`, {
         method: 'GET',
         credentials: 'include',
       });
@@ -93,7 +94,7 @@ const AdminUsers = () => {
 
   const updateUser = async (userId, updates) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/admin/users/${userId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/users/${userId}`, {
         method: 'PUT',
         credentials: 'include',
         headers: {

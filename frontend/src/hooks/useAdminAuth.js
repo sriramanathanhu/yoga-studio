@@ -11,7 +11,8 @@ export const AdminAuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+  const API_BASE_URL = process.env.REACT_APP_API_URL || 
+    (process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8000');
 
   // Check if admin is authenticated on mount
   useEffect(() => {
@@ -21,7 +22,7 @@ export const AdminAuthProvider = ({ children }) => {
   const checkAdminAuth = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${API_BASE_URL}/admin/auth/me`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/auth/me`, {
         method: 'GET',
         credentials: 'include',
         headers: {
@@ -48,7 +49,7 @@ export const AdminAuthProvider = ({ children }) => {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(`${API_BASE_URL}/admin/auth/login`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/auth/login`, {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -77,7 +78,7 @@ export const AdminAuthProvider = ({ children }) => {
 
   const adminLogout = async () => {
     try {
-      await fetch(`${API_BASE_URL}/admin/auth/logout`, {
+      await fetch(`${API_BASE_URL}/api/admin/auth/logout`, {
         method: 'POST',
         credentials: 'include',
       });

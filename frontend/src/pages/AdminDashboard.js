@@ -14,7 +14,8 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+  const API_BASE_URL = process.env.REACT_APP_API_URL || 
+    (process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8000');
 
   useEffect(() => {
     fetchDashboardStats();
@@ -23,7 +24,7 @@ const AdminDashboard = () => {
   const fetchDashboardStats = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${API_BASE_URL}/admin/dashboard/stats`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/dashboard/stats`, {
         method: 'GET',
         credentials: 'include',
         headers: {
